@@ -1,0 +1,8 @@
+framework module sharedVideoPlayer {
+    umbrella header "sharedVideoPlayer.h"
+
+    export *
+    module * { export * }
+
+    use Foundation
+}
