@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -48,7 +51,7 @@ android {
         }
     }
 }
-
+//noinspection GradleDependency
 dependencies {
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -76,4 +79,30 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-hls:$media3Exoplayer")
     implementation("androidx.media3:media3-ui:$media3Exoplayer")
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
+
+    val lifecycleVersion = "2.5.1"
+    val retrofitVersion = "2.9.0"
+    val coroutinesVersion = "1.6.4"
+    val daggerHiltVersion = "2.50"
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
+    kapt ("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
+
+
+    implementation ("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation ("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+
+    implementation ("com.google.dagger:hilt-android:$daggerHiltVersion")
+    kapt ("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+//    implementation ("androidx.room:room-runtime:$room_db_version")
+//    implementation ("androidx.room:room-ktx:$room_db_version")
+//    kapt ("androidx.room:room-compiler:$room_db_version")
 }
