@@ -13,7 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.nabin0.kmmvideoplayer.controller.VideoPlayerControllerFactory
-import com.github.nabin0.kmmvideoplayersampleandroid.presentation.composables.CircleRevealPager
 import com.github.nabin0.kmmvideoplayersampleandroid.presentation.composables.HorizontalCarousel
 import com.github.nabin0.kmmvideoplayersampleandroid.presentation.viewmodels.VideoViewModel
 import com.github.nabin0.kmmvideoplayersampleandroid.ui.theme.KMMVideoPlayerSampleAndroidTheme
