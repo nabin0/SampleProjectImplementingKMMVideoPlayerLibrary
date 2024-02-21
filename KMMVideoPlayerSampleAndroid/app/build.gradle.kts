@@ -102,6 +102,8 @@ dependencies {
     kapt ("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
 
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
 //    implementation ("androidx.room:room-runtime:$room_db_version")
 //    implementation ("androidx.room:room-ktx:$room_db_version")
 //    kapt ("androidx.room:room-compiler:$room_db_version")

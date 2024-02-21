@@ -5,16 +5,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.nabin0.kmmvideoplayer.controller.VideoPlayerControllerFactory
-import com.github.nabin0.kmmvideoplayer.data.ClosedCaption
-import com.github.nabin0.kmmvideoplayer.data.VideoItem
-import com.github.nabin0.kmmvideoplayer.view.VideoPlayer
+import com.github.nabin0.kmmvideoplayersampleandroid.presentation.composables.CircleRevealPager
+import com.github.nabin0.kmmvideoplayersampleandroid.presentation.composables.HorizontalCarousel
 import com.github.nabin0.kmmvideoplayersampleandroid.presentation.viewmodels.VideoViewModel
 import com.github.nabin0.kmmvideoplayersampleandroid.ui.theme.KMMVideoPlayerSampleAndroidTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,11 +31,14 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val videoViewModel: VideoViewModel = hiltViewModel()
                     videoViewModel.getVideoList()
-                    val videoPlayer =
-                        remember { VideoPlayerControllerFactory().createVideoPlayer() }
+                    val videoPlayer =remember { VideoPlayerControllerFactory().createVideoPlayer() }
+
+                    val videoList by videoViewModel.videoList.collectAsState()
                     Column(
                         modifier = Modifier.fillMaxSize(),
                     ) {
+
+                        videoList?.let { HorizontalCarousel(list = it) }
 
 //                        VideoPlayer(
 //                            modifier = Modifier.fillMaxWidth(),
