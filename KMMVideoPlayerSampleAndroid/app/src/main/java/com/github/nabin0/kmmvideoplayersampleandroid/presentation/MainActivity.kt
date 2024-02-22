@@ -3,17 +3,18 @@ package com.github.nabin0.kmmvideoplayersampleandroid.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.github.nabin0.kmmvideoplayer.controller.VideoPlayerControllerFactory
-import com.github.nabin0.kmmvideoplayersampleandroid.presentation.composables.HorizontalCarousel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.github.nabin0.kmmvideoplayersampleandroid.presentation.screens.HomeScreen
+import com.github.nabin0.kmmvideoplayersampleandroid.presentation.screens.VideoDetailScreen
 import com.github.nabin0.kmmvideoplayersampleandroid.presentation.viewmodels.VideoViewModel
 import com.github.nabin0.kmmvideoplayersampleandroid.ui.theme.KMMVideoPlayerSampleAndroidTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,43 +29,40 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val videoViewModel: VideoViewModel = hiltViewModel()
-                    videoViewModel.getVideoList()
-                    val videoPlayer =remember { VideoPlayerControllerFactory().createVideoPlayer() }
-
-                    val videoList by videoViewModel.videoList.collectAsState()
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-
-                        videoList?.let { HorizontalCarousel(list = it) }
-
-//                        VideoPlayer(
-//                            modifier = Modifier.fillMaxWidth(),
-//                            videoItem = VideoItem(
-//                                videoUrl = "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
-//                                listOfClosedCaptions = listOf(
-//                                    ClosedCaption(
-//                                        subtitleLink = "https://cchoichoi.viewlift.com/2019/03/1552555747726_astey_ladies_ep_01_subs_final.srt",
-//                                        language = "english"
-//                                    )
-//                                ),
-//                                title = null,
-//                                videoDescription = null,
-//                                licenseToken = null,
-//                                licenseUrl = null,
-//                                isDrmEnabled = null,
-//                                certificateUrl = null
-//                            ),
-//                            videoPlayerController = videoPlayer,
-//                            listOfVideoUrls = null,
-//                            startPlayMuted = false,
-//                            setCCEnabled = true
-//                        )
-                    }
-
+                    MainNavGraph(navHostController = rememberNavController())
                 }
             }
         }
     }
+}
+
+
+@Composable
+fun MainNavGraph(navHostController: NavHostController) {
+
+    val videoViewModel: VideoViewModel = hiltViewModel()
+    NavHost(navController = navHostController, startDestination = Screens.HomeScreen.route) {
+        composable(route = Screens.HomeScreen.route) {
+            HomeScreen(videoViewModel = videoViewModel, navigateToVideoDetailScreen = {
+                navHostController.navigate(
+                    Screens.VideoDetailScreen.route.replace(
+                        "{VIDEO_ID}",
+                        it.id.toString()
+                    )
+                )
+            })
+        }
+
+        composable(route = Screens.VideoDetailScreen.route) { backStackEntry ->
+
+            val videoId = backStackEntry.arguments?.getString("VIDEO_ID")?.toInt() ?: 0
+            VideoDetailScreen(videoId = videoId, videoViewModel = videoViewModel)
+        }
+    }
+}
+
+
+sealed class Screens(val route: String) {
+    data object HomeScreen : Screens("home")
+    data object VideoDetailScreen : Screens("videoDetail/{VIDEO_ID}")
 }

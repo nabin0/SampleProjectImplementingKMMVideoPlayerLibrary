@@ -2,6 +2,7 @@ package com.github.nabin0.kmmvideoplayersampleandroid.presentation.composables
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,21 +43,31 @@ import com.github.nabin0.kmmvideoplayersampleandroid.data.model.VideoItemRespons
 import kotlin.math.absoluteValue
 import kotlin.math.sqrt
 
-
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun CircleRevealPager(list: List<VideoItemResponse>) {
+fun CircleRevealPager(
+    list: List<VideoItemResponse>,
+    navigateToVideoDetailScreen: (VideoItemResponse) -> Unit
+) {
     val state = rememberPagerState {
         list.size
     }
     var offsetY by remember { mutableFloatStateOf(0f) }
+
+    var pageIndex by remember {
+        mutableStateOf(-1)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.5f)
+            .fillMaxHeight(0.8f)
+            .clickable {
+                if (pageIndex != -1)
+                    navigateToVideoDetailScreen.invoke(list[state.currentPage])
+            }
     ) {
         HorizontalPager(
-            beyondBoundsPageCount = 2,
             modifier = Modifier
                 .pointerInteropFilter {
                     offsetY = it.y
@@ -64,10 +76,10 @@ fun CircleRevealPager(list: List<VideoItemResponse>) {
                 .padding(horizontal = 8.dp, vertical = 8.dp)
                 .clip(
                     RoundedCornerShape(16.dp)
-                )
-                .background(Color.Black),
+                ),
             state = state,
         ) { page ->
+            pageIndex = page
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -99,7 +111,7 @@ fun CircleRevealPager(list: List<VideoItemResponse>) {
                     },
                 contentAlignment = Alignment.Center,
             ) {
-                HorizontalCarousalVideoItem(videoItemResponse = list[page])
+                HorizontalPagerVideoItem(videoItemResponse = list[page])
             }
         }
 

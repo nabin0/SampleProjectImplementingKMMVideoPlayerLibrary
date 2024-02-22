@@ -1,7 +1,6 @@
 package com.github.nabin0.kmmvideoplayersampleandroid.data.repository
 
-import android.util.Log
-import com.github.nabin0.kmmvideoplayer.data.VideoItem
+import com.github.nabin0.kmmvideoplayersampleandroid.data.model.VideoItemResponse
 import com.github.nabin0.kmmvideoplayersampleandroid.data.model.VideosResponse
 import com.github.nabin0.kmmvideoplayersampleandroid.data.network.VideoService
 import com.github.nabin0.kmmvideoplayersampleandroid.domain.repository.VideosRepository
@@ -22,8 +21,16 @@ class VideosRepositoryImpl(
         }
     }
 
-    override suspend fun getVideoById(id: Int, result: (Resource<VideoItem?>) -> Unit) {
-
+    override suspend fun getVideoById(id: Int, result: (Resource<VideoItemResponse?>) -> Unit) {
+        result.invoke(Resource.Loading)
+        try {
+            val response = videoService.getVideoById(id)
+            val body = response.body()
+            result.invoke(Resource.Success(body))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            result.invoke(Resource.Failure(e))
+        }
     }
 
 }

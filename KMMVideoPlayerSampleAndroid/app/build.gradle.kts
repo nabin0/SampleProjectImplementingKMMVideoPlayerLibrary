@@ -103,6 +103,7 @@ dependencies {
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation ("androidx.navigation:navigation-compose:2.7.7")
 
 //    implementation ("androidx.room:room-runtime:$room_db_version")
 //    implementation ("androidx.room:room-ktx:$room_db_version")
