@@ -40,10 +40,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainNavGraph(navHostController: NavHostController) {
 
-    val videoViewModel: VideoViewModel = hiltViewModel()
     NavHost(navController = navHostController, startDestination = Screens.HomeScreen.route) {
         composable(route = Screens.HomeScreen.route) {
-            HomeScreen(videoViewModel = videoViewModel, navigateToVideoDetailScreen = {
+            HomeScreen( navigateToVideoDetailScreen = {
                 navHostController.navigate(
                     Screens.VideoDetailScreen.route.replace(
                         "{VIDEO_ID}",
@@ -54,9 +53,8 @@ fun MainNavGraph(navHostController: NavHostController) {
         }
 
         composable(route = Screens.VideoDetailScreen.route) { backStackEntry ->
-
             val videoId = backStackEntry.arguments?.getString("VIDEO_ID")?.toInt() ?: 0
-            VideoDetailScreen(videoId = videoId, videoViewModel = videoViewModel)
+            VideoDetailScreen(videoId = videoId)
         }
     }
 }

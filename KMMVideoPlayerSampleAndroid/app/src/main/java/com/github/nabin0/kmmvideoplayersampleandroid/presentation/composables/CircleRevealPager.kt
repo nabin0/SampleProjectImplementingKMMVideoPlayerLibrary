@@ -61,7 +61,7 @@ fun CircleRevealPager(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.8f)
+            .fillMaxHeight(0.5f)
             .clickable {
                 if (pageIndex != -1)
                     navigateToVideoDetailScreen.invoke(list[state.currentPage])
@@ -73,7 +73,7 @@ fun CircleRevealPager(
                     offsetY = it.y
                     false
                 }
-                .padding(horizontal = 8.dp, vertical = 8.dp)
+                .padding(horizontal = 4.dp, vertical = 4.dp)
                 .clip(
                     RoundedCornerShape(16.dp)
                 ),

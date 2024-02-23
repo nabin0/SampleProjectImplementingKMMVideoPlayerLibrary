@@ -47,8 +47,8 @@ fun HorizontalPagerVideoItem(videoItemResponse: VideoItemResponse) {
             model = "https://source.unsplash.com/random/400x300?nature${videoItemResponse.id},landscape",
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            placeholder = painterResource(id = R.drawable.ic_launcher_foreground),
-            modifier = Modifier.fillMaxSize()
+            placeholder = painterResource(id = R.drawable.ic_launcher_background),
+            modifier = Modifier.height(300.dp)
         )
         Column(
             modifier = Modifier
@@ -99,14 +99,14 @@ fun HorizontalPagerVideoItem(videoItemResponse: VideoItemResponse) {
 fun CarouselVideoItemLayout(videoItemResponse: VideoItemResponse, modifier: Modifier = Modifier) {
     Box(modifier = modifier) {
         AsyncImage(
-            model = "https://source.unsplash.com/random/400x300?nature${videoItemResponse.id},landscape",
+            model = "https://source.unsplash.com/random/400x300?hills${videoItemResponse.id},landscape",
             contentDescription = null,
             contentScale = ContentScale.Crop,
             placeholder = painterResource(id = R.drawable.ic_launcher_foreground),
-            modifier = Modifier.fillMaxSize()
+            modifier = modifier
         )
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
@@ -132,7 +132,7 @@ fun CarouselVideoItemLayout(videoItemResponse: VideoItemResponse, modifier: Modi
 @Composable
 fun ListVideoItemLayout(videoItemResponse: VideoItemResponse, modifier: Modifier = Modifier) {
 
-    Row(modifier = modifier) {
+    Row(modifier = modifier.background(Color.Black.copy(0.1f))) {
       Box(modifier = Modifier.fillMaxHeight().fillMaxWidth(0.45f)){
           AsyncImage(
               model = "https://source.unsplash.com/random/200x200?nature${videoItemResponse.id},landscape",
@@ -142,8 +142,8 @@ fun ListVideoItemLayout(videoItemResponse: VideoItemResponse, modifier: Modifier
               modifier = Modifier.fillMaxHeight()
           )
 
-          Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = "", modifier = Modifier.align(
-              Alignment.BottomStart).padding(2.dp).size(40.dp))
+          Icon(imageVector = Icons.Filled.PlayArrow, tint = Color.White, contentDescription = "", modifier = Modifier.align(
+              Alignment.BottomStart).padding(2.dp).size(40.dp).clip(RoundedCornerShape(100)).background(Color.Black.copy(0.6f)))
       }
 
         Column(modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(start = 8.dp, end = 4.dp), verticalArrangement = Arrangement.Center) {
@@ -166,11 +166,7 @@ fun ListVideoItemLayout(videoItemResponse: VideoItemResponse, modifier: Modifier
                 ),
                 modifier = Modifier.padding(vertical = 8.dp).clip(RoundedCornerShape(50)).background(Color.Gray.copy(0.2f)).padding(6.dp)
             )
-
-
         }
-
-
     }
 }
 

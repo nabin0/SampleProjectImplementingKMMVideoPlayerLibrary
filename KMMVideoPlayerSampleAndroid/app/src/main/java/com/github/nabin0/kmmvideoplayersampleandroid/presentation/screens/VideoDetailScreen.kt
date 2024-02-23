@@ -1,24 +1,23 @@
 package com.github.nabin0.kmmvideoplayersampleandroid.presentation.screens
 
-import android.util.Log
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,35 +25,73 @@ import com.github.nabin0.kmmvideoplayer.controller.VideoPlayerControllerFactory
 import com.github.nabin0.kmmvideoplayer.data.ClosedCaption
 import com.github.nabin0.kmmvideoplayer.data.VideoItem
 import com.github.nabin0.kmmvideoplayer.view.VideoPlayer
-import com.github.nabin0.kmmvideoplayersampleandroid.data.model.VideoItemResponse
-import com.github.nabin0.kmmvideoplayersampleandroid.presentation.viewmodels.VideoByIdViewModels
+import com.github.nabin0.kmmvideoplayersampleandroid.presentation.composables.ScreenLoadingCardShimmer
 import com.github.nabin0.kmmvideoplayersampleandroid.presentation.viewmodels.VideoViewModel
 
 @Composable
-fun VideoDetailScreen(videoId: Int, videoViewModel: VideoViewModel) {
-
-    val viewmodel: VideoByIdViewModels = hiltViewModel()
+fun VideoDetailScreen(videoId: Int) {
+    val viewmodel: VideoViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
+
         viewmodel.getVideoById(videoId)
     }
-    val state by viewmodel.resultState.collectAsState()
 
-    val vstate by viewmodel.videoItemResponsestate.collectAsState()
+    val videoResponseState by viewmodel.videoItemResponsestate.collectAsState()
 
-    Column {
-        vstate?.let { VideoPlayerView(it) }
+    Column(modifier = Modifier.fillMaxSize()) {
+        videoResponseState?.let {
+            VideoPlayerView(it, modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(10.dp))
+            VideoMetaDataLayout(videoItem = it)
+        } ?: run {
+            LazyColumn(Modifier.fillMaxSize()){
+                item {
+                    ScreenLoadingCardShimmer(imageHeight = 250.dp)
+                    Spacer(modifier = Modifier.height(4.dp))
+                    ScreenLoadingCardShimmer(imageHeight = 50.dp)
+                    Spacer(modifier = Modifier.height(4.dp))
+                    ScreenLoadingCardShimmer(imageHeight = 400.dp) }
+            }
+        }
     }
+}
 
+@Composable
+fun VideoMetaDataLayout(videoItem: VideoItem) {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text(
+            text = videoItem.title ?: "Unknown",
+            style = MaterialTheme.typography.headlineMedium.copy(
+                color = Color.Black,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Black,
+            )
+        )
 
+        Spacer(
+            modifier = Modifier
+                .padding(vertical = 4.dp)
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(Color.White)
+        )
+        Text(
+            text = videoItem.videoDescription ?: "Video description not available",
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = Color.Black,
+                fontSize = 16.sp,
+                lineHeight = 22.sp,
+            )
+        )
+    }
 }
 
 
 @Composable
-fun VideoPlayerView(videoItem: VideoItem) {
+fun VideoPlayerView(videoItem: VideoItem, modifier: Modifier = Modifier) {
     val videoPlayer = remember { VideoPlayerControllerFactory().createVideoPlayer() }
-
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
     ) {
         VideoPlayer(
             modifier = Modifier.fillMaxWidth(),
@@ -78,8 +115,7 @@ val listOfVideoUrls = listOf(
         videoDescription = null,
         isDrmEnabled = null,
         certificateUrl = null,
-    ),
-    VideoItem(
+    ), VideoItem(
         videoUrl = "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
         listOfClosedCaptions = listOf(
             ClosedCaption(
@@ -87,45 +123,45 @@ val listOfVideoUrls = listOf(
                 language = "english"
             )
         ),
-        title = null, videoDescription = null,
+        title = null,
+        videoDescription = null,
         licenseToken = null,
         licenseUrl = null,
         isDrmEnabled = null,
         certificateUrl = null
-    ),
-    VideoItem(
+    ), VideoItem(
         videoUrl = "https://bitmovin-a.akamaihd.net/content/sintel/hls/playlist.m3u8",
-        title = null, videoDescription = null,
+        title = null,
+        videoDescription = null,
         licenseToken = null,
         licenseUrl = null,
         isDrmEnabled = null,
         certificateUrl = null
-    ),
-    VideoItem(
+    ), VideoItem(
         videoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        title = null, videoDescription = null,
+        title = null,
+        videoDescription = null,
         licenseToken = null,
         licenseUrl = null,
         isDrmEnabled = null,
         certificateUrl = null
-    ),
-    VideoItem(
+    ), VideoItem(
         videoUrl = "https://media.istockphoto.com/id/1172642711/video/sea-wave-on-the-beach.mp4?s=mp4-640x640-is&k=20&c=WGMko95H0KBhKVIe519DF6_xeZtu1CdhiUHmK0D7Wy4=",
-        title = null, videoDescription = null,
+        title = null,
+        videoDescription = null,
         licenseToken = null,
         licenseUrl = null,
         isDrmEnabled = null,
         certificateUrl = null
-    ),
-    VideoItem(
+    ), VideoItem(
         videoUrl = "https://cdn.bitmovin.com/content/assets/art-of-motion_drm/mpds/11331.mpd",
         licenseUrl = "https://cwip-shaka-proxy.appspot.com/no_auth",
-        title = null, videoDescription = null,
+        title = null,
+        videoDescription = null,
         licenseToken = null,
         isDrmEnabled = null,
         certificateUrl = null
-    ),
-    VideoItem(
+    ), VideoItem(
         videoUrl = "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
         videoDescription = null,
         licenseToken = null,
