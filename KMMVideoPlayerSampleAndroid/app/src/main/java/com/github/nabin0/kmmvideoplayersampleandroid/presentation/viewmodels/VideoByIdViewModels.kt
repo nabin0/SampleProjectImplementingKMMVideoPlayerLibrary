@@ -40,6 +40,7 @@ class VideoByIdViewModels @Inject constructor(private val videosRepository: Vide
                         val result = response.result
                         result?.let {
                             val videoItem = VideoItem(
+                                id = it.id,
                                 videoUrl = it.videoUrl,
                                 licenseUrl = it.licenseUrl,
                                 licenseToken = it.licenseToken,

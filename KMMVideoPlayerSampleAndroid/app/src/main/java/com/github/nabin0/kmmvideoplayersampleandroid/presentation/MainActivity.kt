@@ -42,19 +42,24 @@ fun MainNavGraph(navHostController: NavHostController) {
 
     NavHost(navController = navHostController, startDestination = Screens.HomeScreen.route) {
         composable(route = Screens.HomeScreen.route) {
-            HomeScreen( navigateToVideoDetailScreen = {
+            HomeScreen( navigateToVideoDetailScreen = { videoId, currentVideoItemIndexInList ->
                 navHostController.navigate(
                     Screens.VideoDetailScreen.route.replace(
                         "{VIDEO_ID}",
-                        it.id.toString()
-                    )
+                        videoId.id.toString()
+                    ).replace("{ITEM_INDEX}", currentVideoItemIndexInList.toString())
                 )
             })
         }
 
         composable(route = Screens.VideoDetailScreen.route) { backStackEntry ->
             val videoId = backStackEntry.arguments?.getString("VIDEO_ID")?.toInt() ?: 0
-            VideoDetailScreen(videoId = videoId)
+            val itemIndexValue = backStackEntry.arguments?.getString("ITEM_INDEX")
+            var itemIndex: Int? = null
+            if(itemIndexValue != "null"){
+                itemIndex = itemIndexValue?.toInt()
+            }
+            VideoDetailScreen(videoId = videoId, itemIndex)
         }
     }
 }
@@ -62,5 +67,5 @@ fun MainNavGraph(navHostController: NavHostController) {
 
 sealed class Screens(val route: String) {
     data object HomeScreen : Screens("home")
-    data object VideoDetailScreen : Screens("videoDetail/{VIDEO_ID}")
+    data object VideoDetailScreen : Screens("videoDetail/{VIDEO_ID}/{ITEM_INDEX}")
 }

@@ -45,7 +45,7 @@ class VideoViewModel @Inject constructor(private val videosRepository: VideosRep
 
     fun getVideoById(id: Int) {
         viewModelScope.launch {
-            delay(2000)
+            delay(700)
             videosRepository.getVideoById(id) { response ->
                 when (response) {
                     is Resource.Failure -> {
@@ -62,6 +62,7 @@ class VideoViewModel @Inject constructor(private val videosRepository: VideosRep
                             }
                             videoItemResponse.value = itemResponse
                             val videoItem = VideoItem(
+                                id = itemResponse.id,
                                 videoUrl = itemResponse.videoUrl,
                                 licenseUrl = itemResponse.licenseUrl,
                                 licenseToken = itemResponse.licenseToken,
@@ -79,9 +80,29 @@ class VideoViewModel @Inject constructor(private val videosRepository: VideosRep
         }
     }
 
+
+    fun getVideoItemListFromVideoResponseList(list: VideosResponse?): List<VideoItem>? {
+        return list?.map { itemResponse ->
+            val listOfClosedCaption = itemResponse.listOfClosedCaptions?.map {
+                ClosedCaption(language = it.language, subtitleLink = it.subtitleLink)
+            }
+            VideoItem(
+                id = itemResponse.id,
+                videoUrl = itemResponse.videoUrl,
+                licenseUrl = itemResponse.licenseUrl,
+                licenseToken = itemResponse.licenseToken,
+                listOfClosedCaptions = listOfClosedCaption,
+                title = itemResponse.title,
+                videoDescription = itemResponse.videoDescription,
+                isDrmEnabled = itemResponse.isDrmEnabled,
+                certificateUrl = itemResponse.certificateUrl,
+            )
+        }
+    }
+
     private fun getVideoList() {
         viewModelScope.launch(Dispatchers.IO) {
-            delay(2000)
+            delay(700)
 
             videosRepository.getVideoList { response ->
                 when (response) {

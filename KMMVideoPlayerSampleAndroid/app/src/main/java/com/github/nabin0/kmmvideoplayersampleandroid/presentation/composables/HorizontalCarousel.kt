@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -17,7 +18,7 @@ import com.github.nabin0.kmmvideoplayersampleandroid.data.model.VideoItemRespons
 @Composable
 fun HorizontalPagerWithCircleRevealAnimation(
     list: List<VideoItemResponse>,
-    navigateToVideoDetailScreen: (VideoItemResponse) -> Unit
+    navigateToVideoDetailScreen: (VideoItemResponse, currentVideoItemIndex: Int?) -> Unit
 ) {
     CircleRevealPager(list = list, navigateToVideoDetailScreen)
 }
@@ -25,7 +26,7 @@ fun HorizontalPagerWithCircleRevealAnimation(
 @Composable
 fun HorizontalCarousel(
     list: List<VideoItemResponse>,
-    navigateToVideoDetailScreen: (VideoItemResponse) -> Unit,
+    navigateToVideoDetailScreen: (VideoItemResponse, currentVideoItemIndex: Int?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(
@@ -33,13 +34,13 @@ fun HorizontalCarousel(
             .fillMaxWidth()
             .height(300.dp)
     ) {
-        items(list) { item: VideoItemResponse ->
+        itemsIndexed(list) { index,item: VideoItemResponse ->
             CarouselVideoItemLayout(videoItemResponse = item, modifier = Modifier
                 .padding(vertical = 8.dp)
                 .fillMaxWidth(0.7f)
                 .padding(horizontal = 4.dp)
                 .fillMaxHeight()
-                .clickable { navigateToVideoDetailScreen.invoke(item) })
+                .clickable { navigateToVideoDetailScreen.invoke(item,index) })
         }
     }
 }

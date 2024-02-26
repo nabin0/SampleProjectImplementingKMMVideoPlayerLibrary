@@ -47,7 +47,7 @@ import kotlin.math.sqrt
 @Composable
 fun CircleRevealPager(
     list: List<VideoItemResponse>,
-    navigateToVideoDetailScreen: (VideoItemResponse) -> Unit
+    navigateToVideoDetailScreen: (VideoItemResponse,  currentVideoItemIndex: Int?) -> Unit
 ) {
     val state = rememberPagerState {
         list.size
@@ -64,7 +64,7 @@ fun CircleRevealPager(
             .fillMaxHeight(0.5f)
             .clickable {
                 if (pageIndex != -1)
-                    navigateToVideoDetailScreen.invoke(list[state.currentPage])
+                    navigateToVideoDetailScreen.invoke(list[state.currentPage], null)
             }
     ) {
         HorizontalPager(

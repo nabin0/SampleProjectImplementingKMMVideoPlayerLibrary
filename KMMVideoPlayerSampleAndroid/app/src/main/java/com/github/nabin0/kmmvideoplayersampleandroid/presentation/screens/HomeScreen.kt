@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -30,7 +31,7 @@ import com.github.nabin0.kmmvideoplayersampleandroid.presentation.viewmodels.Vid
 
 @Composable
 fun HomeScreen(
-    navigateToVideoDetailScreen: (VideoItemResponse) -> Unit
+    navigateToVideoDetailScreen: (VideoItemResponse, currentVideoItemIndex: Int?) -> Unit
 ) {
 
     val videoViewModel: VideoViewModel = hiltViewModel()
@@ -86,13 +87,13 @@ fun HomeScreen(
                         .fillMaxSize()
                 )
             }
-            items(it) { item: VideoItemResponse ->
+            itemsIndexed(it) { index,item: VideoItemResponse ->
                 ListVideoItemLayout(videoItemResponse = item,
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
                         .height(140.dp)
-                        .clickable { navigateToVideoDetailScreen.invoke(item) })
+                        .clickable { navigateToVideoDetailScreen.invoke(item, index) })
             }
         } ?: run {
             item {
