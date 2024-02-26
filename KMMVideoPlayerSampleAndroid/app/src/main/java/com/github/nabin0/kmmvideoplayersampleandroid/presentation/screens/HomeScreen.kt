@@ -35,7 +35,6 @@ fun HomeScreen(
 ) {
 
     val videoViewModel: VideoViewModel = hiltViewModel()
-    Log.d("TAG", "HomeScreen: $videoViewModel")
     val videoList by videoViewModel.videoList.collectAsState()
 
     LazyColumn(

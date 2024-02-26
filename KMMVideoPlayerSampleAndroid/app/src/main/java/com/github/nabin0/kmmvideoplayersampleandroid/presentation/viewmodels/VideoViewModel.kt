@@ -10,6 +10,7 @@ import com.github.nabin0.kmmvideoplayersampleandroid.data.model.VideoItemRespons
 import com.github.nabin0.kmmvideoplayersampleandroid.data.model.VideosResponse
 import com.github.nabin0.kmmvideoplayersampleandroid.domain.repository.VideosRepository
 import com.github.nabin0.kmmvideoplayersampleandroid.utils.Resource
+import com.github.nabin0.kmmvideoplayersampleandroid.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -29,6 +30,8 @@ class VideoViewModel @Inject constructor(private val videosRepository: VideosRep
 
     var currentSelectedVideo: MutableStateFlow<VideoItemResponse?> = MutableStateFlow(null)
 
+    val index = Utils.playerController.currentPlayingMediaIndex.asStateFlow()
+
     var videoItem = videoList.value?.get(0)
 
     private val _isLoading = MutableStateFlow(false)
@@ -40,7 +43,7 @@ class VideoViewModel @Inject constructor(private val videosRepository: VideosRep
         getVideoList()
     }
 
-    var videoItemResponsestate: MutableStateFlow<VideoItem?> = MutableStateFlow(null)
+    var videoItemMutableStateFlow: MutableStateFlow<VideoItem?> = MutableStateFlow(null)
     var videoItemResponse: MutableStateFlow<VideoItemResponse?> = MutableStateFlow(null)
 
     fun getVideoById(id: Int) {
@@ -72,7 +75,7 @@ class VideoViewModel @Inject constructor(private val videosRepository: VideosRep
                                 isDrmEnabled = itemResponse.isDrmEnabled,
                                 certificateUrl = itemResponse.certificateUrl,
                             )
-                            videoItemResponsestate.value = videoItem
+                            videoItemMutableStateFlow.value = videoItem
                         }
                     }
                 }
@@ -125,12 +128,11 @@ class VideoViewModel @Inject constructor(private val videosRepository: VideosRep
     }
 
 
-    fun getCurrentVideoById(videoId: Int) {
+    fun getCurrentVideoMetadata(videoId: Int) {
         videoList.value?.let { videoResponse ->
-            currentSelectedVideo.value = videoResponse.find {
+            videoItemResponse.value = videoResponse.find {
                 it.id == videoId
             }
-            videoItem = currentSelectedVideo.value
         }
     }
 }

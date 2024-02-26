@@ -47,7 +47,7 @@ fun HorizontalPagerVideoItem(videoItemResponse: VideoItemResponse) {
             model = "https://source.unsplash.com/random/400x300?nature${videoItemResponse.id},landscape",
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            placeholder = painterResource(id = R.drawable.ic_launcher_background),
+            placeholder = painterResource(id = R.drawable.ic_launcher_foreground),
             modifier = Modifier.height(300.dp)
         )
         Column(

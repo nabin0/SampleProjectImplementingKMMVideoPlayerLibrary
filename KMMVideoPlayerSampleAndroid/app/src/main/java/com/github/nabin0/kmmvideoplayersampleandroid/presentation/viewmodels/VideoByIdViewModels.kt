@@ -36,7 +36,6 @@ class VideoByIdViewModels @Inject constructor(private val videosRepository: Vide
 
                     is Resource.Success -> {
                         resultState.value = 2
-                        Log.d("TAG", "getVideoById: ")
                         val result = response.result
                         result?.let {
                             val videoItem = VideoItem(
